@@ -1,0 +1,6 @@
+--Join Stratergies of Spark
+Broadcast Hash Join
+shuffle sort merge join
+Shuffle hash join
+Cartesian join
+

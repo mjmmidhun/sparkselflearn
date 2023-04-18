@@ -1,0 +1,116 @@
+https://www.youtube.com/watch?v=dq73Ghk3MQg
+
+from pyspark.sql import *
+
+spark=sparkSession.builder.appName("sample").getorCreate()
+
+#import data from a csv file where we have headers in that csv file
+fifa_df=spark.read.csv("file:///home/.../fifa_player.csv", inferschema = True, header = True)
+
+#action=show so that we can see the data
+fifa_df.show()
+
+#To see the type of each column and nullable
+fifa_df.printSchema()
+
+#To see all the columns in dataframe
+fifa_df.columns
+
+#take the count of dataframe
+fifa_df.count()
+
+#take the count of columns
+len(fifa_df.columns)
+
+#to describe particular column, we wil get count, mean, stddev, min, max
+fifa_df.describe('coach Name').show()
+
+#select specific columns only
+fifa_df.select('Player Name', 'Coach Name').show()
+
+#filter the content
+fifa_df.filter(fifa_df.MatchID=='1096').show()
+
+#take count of specific items
+fifa_df.filter(fifa_df.Position=='C').count()
+
+#adding multiple filters
+fifa_df.filter((fifa_df.Position=='C') & (fifa_df.Event=='G40')).show()
+
+#orderby in df
+fifa_df.orderBy(fifa_df.MatchID).show()
+
+#querying by sql query
+fifa_df.registerTempTable('fifa_table')
+sqlContext=SQLContext(spark) # if geting error 'sqlContext not defined'.
+sqlContext.sql('select * from fifa_table').show()
+
+superhero_df=spark.read.option("header","true").csv(r"C:\Users\ADMIN\OneDrive\Documents\Spark\Dataset\heroes_information.csv")
+
+superhero_df.show(10)
+
+#groupby and count
+Race_df = superhero_df.groupby('Race')\
+.count()\
+.show()
+
+#get schema
+superhero_df.printSchema()
+
+#adding columns (with column)
+superheroaltered_df = superhero_df.withColumn('Weight+2',superhero_df['Weight']+20)
+
+#rename column
+superheroaltered_df.withColumnRenamed('name', 'new_name')
+
+#drop column
+superheroaltered_df = superheroaltered_df.drop('Weight+2')
+
+#drop row for null value
+superheroaltered_df.na.drop().count()
+
+#drop if all columns are null
+superheroaltered_df.na.drop(how='all').count()
+
+#drop if any columns are null
+superheroaltered_df.na.drop(how='any').count()
+
+#drop if any 2 columns are null
+superheroaltered_df.na.drop(how='any', thresh=3).count()
+
+#drop if particular column is null
+superheroaltered_df.na.drop(how='any' subset[columnName]).count()
+
+#fill null values
+superheroaltered_df.na.fill('missing values').show()
+superheroaltered_df.na.fill('', ).show()
+
+#filter operations
+df_salary.filter("salary<=50000").select('name','salary').show(30)
+
+#filter operations using operator &, |(or)
+df_salary.filter((df_salary["salary"]<=50000) | (df_salary["salary"]>=120000)).select('name','salary').show(30)
+
+#groupby
+df_salary.groupBy('dept').max("salary").show()
+df_salary.groupBy('dept').avg("salary").show()
+
+#join
+df_joined=df_salary.join(df_dept, "dept") #here "dept" is the common column
+df_joined=df_salary.join(df_dept, df_salary.dept=df_dept.dept, inner)
+
+#withColumn and select
+df_joined.withColumn("Indollar", df_joined["salary"]/80 ).select("name","Indollar").show()
+
+#create new schema
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType,StructField, StringType, IntegerType
+
+schema = StructType([ \
+    StructField("firstname",StringType(),True), \
+    StructField("middlename",StringType(),True), \
+    StructField("lastname",StringType(),True), \
+    StructField("id", StringType(), True), \
+    StructField("gender", StringType(), True), \
+    StructField("salary", IntegerType(), True) \
+  ])

@@ -1,0 +1,40 @@
+import findspark
+findspark.init()
+findspark.find()
+from pyspark.sql import SparkSession
+from pyspark.sql import SQLContext
+spark = SparkSession.builder.appName("Data by Flag").getOrCreate()
+sqlContext=SQLContext(spark)
+
+#  Select all the data from the table "Data" where column "Flag" value is set to true.
+
+Data = [(1, "John", True,"replace_this","john"), (2, "Jane", False, "replace_this","jane"), (3, "Bob", True, "replace_this","bob")]
+Data_df = spark.createDataFrame(Data, ["ID", "Name", "Flag",'StringA','StringB'])
+Data_df.createOrReplaceTempView("Data")
+Data_df.show()
+df_selected = sqlContext.sql("select * from Data where Flag = True")
+df_selected.show()
+
+# catch exceptions
+
+def select_data_by_flag(spark, Data):
+    try:
+        Data_df = spark.read.table(Data)
+        df_selected = data_df.filter(data_df.Flag == True)
+        return selected_df
+    except Exception as e:
+        print("Error:", e)
+        return None
+		
+# Export it to a local file "exported.dat".
+
+import pandas as pd
+pandas_df=df_selected.toPandas()
+pandas_df.to_csv('export.dat', mode="w")
+df = pd.read_csv('export.dat')
+
+# Transform data stored in a local file, set the value of the column "StringA" to the uppercase value of the "StringB" with an appended suffix "_". Save to a local file "transformed.dat"
+
+df['StringA'] = df['StringB'].str.upper() + '_'
+df
+df.to_csv('transformed.dat', mode="w")

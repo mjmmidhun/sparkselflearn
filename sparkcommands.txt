@@ -114,3 +114,17 @@ schema = StructType([ \
     StructField("gender", StringType(), True), \
     StructField("salary", IntegerType(), True) \
   ])
+
+#how to make spark compactable to hive datastore
+spark = SparkSession.builder.appName("Read Hive Table").enableHiveSupport().getOrCreate()
+
+### Broadcast join
+
+df1 = spark.read.parquet("path/to/large_file")
+df2 = spark.read.csv("path/to/small_file", header=True)
+# Broadcast the smaller DataFrame
+broadcasted_df2 = broadcast(df2)
+
+# Perform the join operation
+joined_df = df1.join(broadcasted_df2, "join_column")
+Join_df.show()

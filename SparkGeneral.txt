@@ -4,3 +4,6 @@ shuffle sort merge join
 Shuffle hash join
 Cartesian join
 
+--sparksql---
+SQL Supported by spark engine
+Support performance Tuning and Optimization

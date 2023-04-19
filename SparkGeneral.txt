@@ -7,3 +7,9 @@ Cartesian join
 --sparksql---
 SQL Supported by spark engine
 Support performance Tuning and Optimization
+
+
+---Delta Lake---
+Spark answer to Relational Database functionaliity
+Snowflake, Amazon Redshift, Bigquery, Azure Synapse
+

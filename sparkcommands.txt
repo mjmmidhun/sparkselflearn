@@ -128,3 +128,22 @@ broadcasted_df2 = broadcast(df2)
 # Perform the join operation
 joined_df = df1.join(broadcasted_df2, "join_column")
 Join_df.show()
+
+#Spark can easily integrate with Hive and read/write data to/from the Hive metastore.
+spark = SparkSession.builder.appName("Read Hive Table").enableHiveSupport().getOrCreate()
+
+#Hive command to scan for missing partitions
+MSCK REPAIR TABLE my_table;
+
+#change typecast
+from pyspark.sql.functions import col
+from pyspark.sql.types import IntegerType,BooleanType,DateType
+df_joined = df_joined.withColumn("Indollar",col("Indollar").cast(IntegerType()))
+df_joined.show()
+
+#Hadoop
+#first 10 line of file in hdfs
+hadoop fs -cat /mydir/example.txt | head -n 10
+
+#copy files from one cluster to another cluster
+hadoop distcp <src> <dst>

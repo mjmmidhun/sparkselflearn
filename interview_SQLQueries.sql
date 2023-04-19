@@ -34,4 +34,11 @@ SELECT '2023-01-01', 'ProductA', 1000 UNION ALL
 SELECT '2023-01-02', 'ProductB', 1500 UNION ALL
 SELECT '2023-01-03', 'ProductC', 2000;
 
-
+--create an external table from  existing table
+CREATE EXTERNAL TABLE my_external_table
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+LOCATION '/path/to/external/table'
+AS
+SELECT *
+FROM my_existing_table;
